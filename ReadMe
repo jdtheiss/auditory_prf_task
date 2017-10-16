@@ -1,0 +1,31 @@
+Auditory pRF Task
+-----------------
+Justin Theiss
+Silver Lab
+2017
+
+Equate loudness across various frequencies, then use those volumes in an auditory pRF task in which the participant indicates when intervals between tones are not uniform.
+
+Contains:
+Two scripts to be run in psychopy: equate_freqs.py, auditory_pRF.py
+One function used by above scripts: generate_wave.py
+
+equate_freqs.py instructions:
+On first trial, press 1 or 2 to increase or decrease volume, respectively. Once the desired volume has been reached, press 3 to continue.
+For each following trial, two tones will be presented in a random order. Press 1 if the first tone presented is the loudest of the two. Press 2 if the second tone was the loudest of the two tones. Continue for each pair presented.
+
+auditory_pRF.py instructions:
+For each trial, a burst of tones will be presented with some interval between each tone. If the interval between each tone in a trial is not uniform, press 1. Otherwise, do not press any button. The task is to closely attend to the auditory stimulus.
+
+Requires: psychopy, python, numpy, os
+Optional: wave, struct
+
+Getting started:
+1. Open equate_freqs.py and auditory_prf.py in PsychoPy Coder
+2. Run equate_freqs in psychopy, entering subject ID and other parameters
+3. Run auditory_prf in psychopy, entering subject ID and other parameters
+4. Output files are located in /subjs folder as follows:
+  /subjs/justin_equated_freqs.csv
+  /subjs/justin_auditory_prf.csv
+
+Note: auditory_prf requires that equate_freqs has been run (i.e. there must be a participant_equated_freqs.csv file in the /subjs folder). Frequencies can be changed directly in both equate_freqs.py and auditory_prf.py. The generate_wave.py function can save .wav files, but must be uncommented and requires the following modules: wave, struct.
