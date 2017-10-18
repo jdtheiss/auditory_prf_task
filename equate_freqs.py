@@ -9,7 +9,7 @@ myDlg.addField('Subject:')
 myDlg.addField('Session:', 1)
 myDlg.addField('Number of Blocks:', 1)
 myDlg.addField('Comparison frequency:', 1000)
-myDlg.addField('Tone duration:', 0.1)
+myDlg.addField('Tone duration:', 0.2)
 myDlg.addField('Inter-stimulus interval:', 0.5)
 # show dialog and wait for OK or Cancel
 subj_data = myDlg.show()  
@@ -28,7 +28,7 @@ outputFile = 'subjs/' + participant + "_equated_freqs"
 freqs = [88, 125, 177, 250, 354, 500, 707, 1000, 1414, 2000, 2828, 4000, 5657, 8000]
 
 # add current path to paths
-prefs.general['paths'] = ['/Users/theissjd/Documents/Berkeley/Year2/Auditory_pRF']
+prefs.general['paths'] = ['.']
 # import custom code generate_wave
 import generate_wave as gw
 
@@ -44,17 +44,13 @@ fixation.draw()
 win.flip()
 
 # function to equate volumes
-def equate_volume(base_freq, base_volume, freq, volume, duration=0.1, isi=0.5):
+def equate_volume(base_freq, base_volume, freq, volume, duration=0.2, isi=0.5):
     resp = ['']
     # generate base_wave
     base_wave = gw.sine_wave(base_freq, volume, duration, AM=5)
     base_wave = gw.apply_ramp(base_wave, 0.01, 0.01)
     # randomize comparison volume
-    if base_freq != freq:
-        volume = volume - np.random.randint(1, 5) * 0.1
-        volume = volume + np.random.randint(1, 5) * 0.1
-    # if same freq as base_freq, return
-    elif base_freq == freq and base_freq > 0:
+    if base_freq == freq and base_freq > 0:
         trials.addData('volume', volume)
         return volume
     # generate freq_wave
@@ -62,7 +58,7 @@ def equate_volume(base_freq, base_volume, freq, volume, duration=0.1, isi=0.5):
     freq_wave = gw.apply_ramp(freq_wave, 0.01, 0.01)
     # set switch indicators and volume changes
     s = inc = dec = 0
-    d = 0.1
+    d = 0.25
     while (resp[0] != '3' and base_freq==0) or s < 4:
         # set base_freq and freq
         stim1 = sound.Sound(base_wave)
@@ -110,7 +106,7 @@ def equate_volume(base_freq, base_volume, freq, volume, duration=0.1, isi=0.5):
         # check for switches
         if inc == dec == 1 and base_freq > 0:
             s += 1
-            d -= 0.025
+            d -= 0.05
             inc = dec = 0
     # add volume
     if base_freq > 0:
