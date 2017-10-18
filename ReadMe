@@ -4,7 +4,7 @@ Justin Theiss
 Silver Lab
 2017
 
-Equate loudness across various frequencies, then use those volumes in an auditory pRF task in which the participant indicates when intervals between tones are not uniform.
+Equate loudness across various frequencies, then use those volumes in an auditory pRF task in which the participant indicates when the volume increases or decreases during a trial.
 
 Contains:
 Two scripts to be run in psychopy: equate_freqs.py, auditory_pRF.py
@@ -15,7 +15,7 @@ On first trial, press 1 or 2 to increase or decrease volume, respectively. Once 
 For each following trial, two tones will be presented in a random order. Press 1 if the first tone presented is the loudest of the two. Press 2 if the second tone was the loudest of the two tones. Continue for each pair presented.
 
 auditory_pRF.py instructions:
-For each trial, a burst of tones will be presented with some interval between each tone. If the interval between each tone in a trial is not uniform, press 1. Otherwise, do not press any button. The task is to closely attend to the auditory stimulus.
+For each trial, an AM waveform at some frequency will be presented. If the volume increases or decreases across the trial, press 1. Otherwise, do not press any button. The point is to get the subject to attend to the auditory stimulus.
 
 Requires: psychopy, python, numpy, os
 Optional: wave, struct
