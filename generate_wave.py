@@ -2,11 +2,10 @@ import numpy as np
 # import wave as wav
 # import struct
 
-def sine_wave(freq, volume, duration, AM=0, phi=np.pi sampleRate=44100):
+def sine_wave(freq, volume, duration, AM=0, sampleRate=44100):
     # create sine wave at frequency, sample rate, (max) volume and duration (secs)
     # optional amplitude modulation (in Hz; default = 0, no modulation)
-    # optional phase shift of AM (phi in radians; default = pi)
-    m = np.cos((2.0 * np.pi * AM * np.linspace(0, duration, num=sampleRate*duration)) + phi)
+    m = np.cos((2.0 * np.pi * AM * np.linspace(0, duration, num=sampleRate*duration)) + np.pi)
     s = np.sin(2.0 * np.pi * freq * np.linspace(0, duration, num=sampleRate*duration))
     return np.array((1 + m) * volume * s)
 

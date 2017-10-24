@@ -11,6 +11,7 @@ myDlg.addField('Number of Blocks:', 10)
 myDlg.addField('TR (secs):', 3.5)
 myDlg.addField('TA (secs):', 2)
 myDlg.addField('Tone duration (secs):', 0.2)
+myDlg.addField('Amplitude Modulation (Hz):', 5)
 myDlg.addField('Inter-burst interval (secs):', 0)
 myDlg.addField('Number of tones in burst:', 5)
 # show dialog and wait for OK or Cancel
@@ -22,8 +23,9 @@ if myDlg.OK:
     TR = subj_data[3]
     TA = subj_data[4]
     t = subj_data[5]
-    ibi = subj_data[6]
-    nTones = subj_data[7]
+    AM = subj_data[6]
+    ibi = subj_data[7]
+    nTones = subj_data[8]
 else:
     core.quit()
     
@@ -60,10 +62,10 @@ for (i, f) in enumerate(np.random.permutation(freqs)):
     # set volume
     v = [float(k['volume']) for k in sorted_conditions if k['freq'] == f][0]
     # set jitter
-    j = np.random.randint(jitter_range[0], jitter_range[1]) * 0.001
+    j = 200 * 0.001 #np.random.randint(jitter_range[0], jitter_range[1]) * 0.001
     # set random index for test trial
     if np.random.randint(5) == 1:
-        idx = np.random.randint(0, nTones)
+        idx = np.random.randint(1, nTones-1)
     else:
         idx = -1
     trialList.append({'freq': f, 'volume': v, 'jitter': j, 'idx': idx})
@@ -79,11 +81,11 @@ def run_trial(freq, volume, jitter, idx, TR=3.5, TA=2, t=0.2, ibi=0, nTones=5):
     core.wait(TA)
     core.wait(jitter)
     # set stimulus
-    wave = gw.sine_wave(freq, volume, t, AM=5)
+    wave = gw.sine_wave(freq, volume, t, AM=AM)
     stim = sound.Sound(wave)
-    # set odd wave with vol_chng
-    vol_chng = [0.05, 0.1, 0.25, 1.75, 1.9, 1.95][np.random.randint(6)]
-    odd_wave = gw.sine_wave(freq, vol_chng * volume, t, AM=5)
+    # set odd wave with vol_multiply
+    vol_multiply = [0.05, 0.1, 0.25, 1.75, 1.9, 1.95][np.random.randint(6)]
+    odd_wave = gw.sine_wave(freq, vol_multiply * volume, t, AM=AM)
     odd_stim = sound.Sound(odd_wave)
     # set burst
     burst = range(0, nTones)
@@ -99,7 +101,7 @@ def run_trial(freq, volume, jitter, idx, TR=3.5, TA=2, t=0.2, ibi=0, nTones=5):
             core.wait(stim.getDuration() + ibi)
     trialOffset = core.getTime()
     iti = TR - TA - jitter - 0.5 
-    core.wait(iti)
+#    core.wait(iti)
     # record response
     resp = event.getKeys(keyList=['1'], timeStamped=True)
     # no response
@@ -122,7 +124,7 @@ def run_trial(freq, volume, jitter, idx, TR=3.5, TA=2, t=0.2, ibi=0, nTones=5):
             trials.addData('acc', 0)
     # addData for trial
     if idx > -1:
-        trials.addData('vol_chng', vol_chng)
+        trials.addData('vol_multiply', vol_multiply)
     trials.addData('trialOnset', trialOnset)
     trials.addData('trialOffset', trialOffset)
     trials.addData('iti', iti)
@@ -132,8 +134,7 @@ beginTime = core.getTime()
 for trial in trials:
     pulseOnset = event.waitKeys("5", timeStamped=True) # wait for scanner pulse
     trials.addData('pulseOnset', pulseOnset[0][1])
-    run_trial(trial['freq'], trial['volume'], trial['jitter'], trial['idx'],
-        TR, TA, t, ibi, nTones)
+    run_trial(trial['freq'], trial['volume'], trial['jitter'], trial['idx'], TR, TA, t, ibi, nTones)
 endTime = core.getTime()
 trials.addData('beginTime', beginTime)
 trials.addData('endTime', endTime)

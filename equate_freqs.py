@@ -8,9 +8,10 @@ myDlg.addText('Experiment info')
 myDlg.addField('Subject:')
 myDlg.addField('Session:', 1)
 myDlg.addField('Number of Blocks:', 1)
-myDlg.addField('Comparison frequency:', 1000)
-myDlg.addField('Tone duration:', 0.2)
-myDlg.addField('Inter-stimulus interval:', 0.5)
+myDlg.addField('Comparison frequency (Hz):', 1000)
+myDlg.addField('Tone duration (secs):', 0.2)
+myDlg.addField('Amplitude Modulation (Hz):', 5)
+myDlg.addField('Inter-stimulus interval (secs):', 0.5)
 # show dialog and wait for OK or Cancel
 subj_data = myDlg.show()  
 if myDlg.OK:  
@@ -19,7 +20,8 @@ if myDlg.OK:
     nBlocks = subj_data[2]
     base_freq = subj_data[3]
     duration = subj_data[4]
-    isi = subj_data[5]
+    AM = subj_data[5]
+    isi = subj_data[6]
 else:
     core.quit()
 
@@ -47,14 +49,14 @@ win.flip()
 def equate_volume(base_freq, base_volume, freq, volume, duration=0.2, isi=0.5):
     resp = ['']
     # generate base_wave
-    base_wave = gw.sine_wave(base_freq, volume, duration, AM=5)
+    base_wave = gw.sine_wave(base_freq, volume, duration, AM=AM)
     base_wave = gw.apply_ramp(base_wave, 0.01, 0.01)
     # randomize comparison volume
     if base_freq == freq and base_freq > 0:
         trials.addData('volume', volume)
         return volume
     # generate freq_wave
-    freq_wave = gw.sine_wave(freq, volume, duration, AM=5)
+    freq_wave = gw.sine_wave(freq, volume, duration, AM=AM)
     freq_wave = gw.apply_ramp(freq_wave, 0.01, 0.01)
     # set switch indicators and volume changes
     s = inc = dec = 0
